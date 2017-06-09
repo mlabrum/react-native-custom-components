@@ -439,6 +439,7 @@ var Navigator = React.createClass({
       activeGesture: null,
       pendingGestureProgress: null,
       transitionQueue: [],
+      mounted: false
     };
   },
 
@@ -477,6 +478,7 @@ var Navigator = React.createClass({
   },
 
   componentDidMount: function() {
+    this.setState({mounted: true})
     this._handleSpringUpdate();
     this._emitDidFocus(this.state.routeStack[this.state.presentedIndex]);
     this._enableTVEventHandler();
@@ -571,7 +573,7 @@ var Navigator = React.createClass({
    * happening, we only set values for the transition and the gesture will catch up later
    */
   _handleSpringUpdate: function() {
-    if (!this.isMounted()) {
+    if (!this.state.mounted) {
       return;
     }
     // Prioritize handling transition in progress over a gesture:
@@ -595,7 +597,7 @@ var Navigator = React.createClass({
    * This happens at the end of a transition started by transitionTo, and when the spring catches up to a pending gesture
    */
   _completeTransition: function() {
-    if (!this.isMounted()) {
+    if (!this.state.mounted) {
       return;
     }
 
